@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAT PAWS :: LIVE :: 01.30.2026</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #000033;
+      background-image: radial-gradient(#0000AA 1px, transparent 1px);
+      background-size: 24px 24px;
+      color: #00FF00;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 12px;
+    }
+
+    marquee {
+      color: #FFFF00;
+      font-size: 14px;
+      font-family: 'Courier New', Courier, monospace;
+      background: #000000;
+      border: 2px outset #FF00FF;
+      padding: 4px 0;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: Impact, 'Arial Narrow', Arial, sans-serif;
+      color: #FF00FF;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      text-align: center;
+      text-shadow:
+        0 0 8px #FF00FF,
+        0 0 20px #FF00FF,
+        0 0 40px #AA00AA;
+      letter-spacing: 6px;
+      margin-bottom: 6px;
+    }
+
+    h2 {
+      font-family: 'Courier New', Courier, monospace;
+      color: #00FFFF;
+      font-size: clamp(0.9rem, 3vw, 1.3rem);
+      text-align: center;
+      letter-spacing: 4px;
+      margin-bottom: 14px;
+    }
+
+    hr {
+      border: none;
+      height: 2px;
+      background: #FF00FF;
+      box-shadow:
+        0 0 6px #FF00FF,
+        0 0 14px #FF00FF;
+      margin: 14px 0;
+    }
+
+    /* ── LAYOUT TABLE ─────────────────────────────────── */
+    .layout-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 3px outset #00FF00;
+    }
+
+    .col-setlist {
+      width: 55%;
+      vertical-align: top;
+      padding: 14px;
+      border-right: 3px inset #00FF00;
+    }
+
+    .col-nowplaying {
+      width: 45%;
+      vertical-align: top;
+      padding: 14px;
+    }
+
+    .panel-title {
+      color: #FFFF00;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 6px #FFFF00;
+    }
+
+    /* ── SET LIST ─────────────────────────────────────── */
+    #track-list {
+      list-style: none;
+      counter-reset: track-counter;
+    }
+
+    #track-list li {
+      counter-increment: track-counter;
+      cursor: pointer;
+      padding: 6px 8px;
+      margin-bottom: 4px;
+      border: 2px solid transparent;
+      color: #00FF00;
+      transition: color 0.1s;
+      font-size: 0.95rem;
+    }
+
+    #track-list li::before {
+      content: counter(track-counter) ". ";
+      color: #00FFFF;
+    }
+
+    #track-list li:hover {
+      color: #FFFF00;
+      border-color: #00FF00;
+      border-style: inset;
+      background: rgba(0, 255, 0, 0.07);
+    }
+
+    #track-list li.active {
+      color: #FFFF00;
+      border: 2px inset #00FF00;
+      background: rgba(0, 255, 0, 0.1);
+    }
+
+    #track-list li.active::before {
+      content: "> " counter(track-counter) ". ";
+      color: #FF00FF;
+    }
+
+    /* ── NOW PLAYING ──────────────────────────────────── */
+    #now-playing-name {
+      color: #FF00FF;
+      font-size: 1.05rem;
+      min-height: 1.4em;
+      margin-bottom: 12px;
+      text-shadow: 0 0 6px #FF00FF;
+      word-break: break-word;
+    }
+
+    audio {
+      width: 100%;
+      margin-bottom: 12px;
+      filter: hue-rotate(180deg) saturate(2);
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      color: #000033;
+      background: #00FF00;
+      border: 3px outset #00FF00;
+      padding: 5px 14px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      flex: 1;
+    }
+
+    .btn:active {
+      border-style: inset;
+    }
+
+    .btn:hover {
+      background: #00FFFF;
+      color: #000033;
+    }
+
+    .auto-advance {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #00FFFF;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    .auto-advance input[type="checkbox"] {
+      accent-color: #FF00FF;
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────── */
+    footer {
+      text-align: center;
+      color: #00FFFF;
+      font-size: 0.8rem;
+      padding: 8px 0;
+    }
+
+    footer p + p {
+      margin-top: 4px;
+      color: #00FF00;
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 800px) {
+      .layout-table,
+      .layout-table tbody,
+      .layout-table tr,
+      .layout-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .col-setlist {
+        border-right: none;
+        border-bottom: 3px inset #00FF00;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <marquee scrollamount="4">
+    *** RAT PAWS LIVE SET *** 01.30.2026 *** SEATTLE WA *** RAT PAWS LIVE SET *** 01.30.2026 *** SEATTLE WA *** RAT PAWS LIVE SET *** 01.30.2026 *** SEATTLE WA ***
+  </marquee>
+
+  <h1>RAT PAWS</h1>
+  <h2>:: LIVE :: 01.30.2026 ::</h2>
+
+  <hr>
+
+  <table class="layout-table">
+    <tbody>
+      <tr>
+        <!-- SET LIST -->
+        <td class="col-setlist">
+          <p class="panel-title">[ SET LIST ]</p>
+          <ol id="track-list">
+            <li data-src="media/1-30-2026/Anything Can Happen.mp3">Anything Can Happen</li>
+            <li data-src="media/1-30-2026/Blissfully.mp3">Blissfully</li>
+            <li data-src="media/1-30-2026/Bus Catcher.mp3">Bus Catcher</li>
+            <li data-src="media/1-30-2026/Cal Anderson.mp3">Cal Anderson</li>
+            <li data-src="media/1-30-2026/Ex Lovers Only.mp3">Ex Lovers Only</li>
+            <li data-src="media/1-30-2026/I.W.D..mp3">I.W.D.</li>
+            <li data-src="media/1-30-2026/Knife Twister.mp3">Knife Twister</li>
+            <li data-src="media/1-30-2026/Medley.mp3">Medley</li>
+            <li data-src="media/1-30-2026/Sad Girls.mp3">Sad Girls</li>
+          </ol>
+        </td>
+
+        <!-- NOW PLAYING -->
+        <td class="col-nowplaying">
+          <p class="panel-title">[ NOW PLAYING ]</p>
+          <p id="now-playing-name">—</p>
+          <audio id="player" controls></audio>
+          <div class="controls">
+            <button class="btn" id="btn-prev">&lt;&lt; PREV</button>
+            <button class="btn" id="btn-next">NEXT &gt;&gt;</button>
+          </div>
+          <label class="auto-advance">
+            <input type="checkbox" id="auto-advance" checked>
+            AUTO-ADVANCE
+          </label>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <footer>
+    <p>*~* BEST VIEWED IN NETSCAPE NAVIGATOR 4.0 AT 800x600 *~*</p>
+    <p>&copy; 2026 RAT PAWS &mdash; ALL RIGHTS RESERVED &mdash; DO NOT STEAL OUR VIBES</p>
+  </footer>
+
+  <script>
+  (function () {
+    var tracks = Array.from(document.querySelectorAll('#track-list li'));
+    var player = document.getElementById('player');
+    var nowPlayingName = document.getElementById('now-playing-name');
+    var autoAdvanceCheckbox = document.getElementById('auto-advance');
+    var currentIndex = -1;
+
+    function encodeSrc(rawSrc) {
+      return rawSrc.split('/').map(encodeURIComponent).join('/');
+    }
+
+    function setActive(index) {
+      tracks.forEach(function (li, i) {
+        li.classList.toggle('active', i === index);
+      });
+      currentIndex = index;
+      nowPlayingName.textContent = tracks[index].textContent.trim();
+    }
+
+    function loadTrack(index, autoPlay) {
+      if (index < 0 || index >= tracks.length) return;
+      var raw = tracks[index].getAttribute('data-src');
+      player.src = encodeSrc(raw);
+      setActive(index);
+      if (autoPlay) {
+        player.play();
+      }
+    }
+
+    // Pre-fill display without autoplaying
+    loadTrack(0, false);
+
+    // Click track in set list
+    tracks.forEach(function (li, index) {
+      li.addEventListener('click', function () {
+        loadTrack(index, true);
+      });
+    });
+
+    // PREV: restart if >3s in, else go to previous
+    document.getElementById('btn-prev').addEventListener('click', function () {
+      if (currentIndex < 0) return;
+      if (player.currentTime > 3) {
+        player.currentTime = 0;
+        if (!player.paused) player.play();
+      } else {
+        var prev = currentIndex - 1;
+        if (prev < 0) prev = tracks.length - 1;
+        loadTrack(prev, !player.paused);
+      }
+    });
+
+    // NEXT
+    document.getElementById('btn-next').addEventListener('click', function () {
+      if (currentIndex < 0) return;
+      var next = (currentIndex + 1) % tracks.length;
+      loadTrack(next, !player.paused);
+    });
+
+    // Auto-advance on track end
+    player.addEventListener('ended', function () {
+      if (!autoAdvanceCheckbox.checked) return;
+      var next = (currentIndex + 1) % tracks.length;
+      loadTrack(next, true);
+    });
+  })();
+  </script>
+
+</body>
+</html>
